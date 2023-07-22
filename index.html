@@ -1,0 +1,129 @@
+<html>
+<head>
+    <title>
+        Sudoku Solver
+    </title>
+    <style>
+        body { font-family: Calibri, sans-serif; }
+    #container { text-align: center }
+    table { border-collapse: collapse; font-size: 2em; margin: 0 auto; }
+    colgroup, tbody { border: solid medium; }
+    td { border: solid thin; height: 1.4em; width: 1.4em; text-align: center; padding: 0; }
+    button { margin-top: 15px; font-size: 1.5em; }
+    
+    padd{padding-bottom: 100px;}
+    </style>
+    <script type="text/javascript" src="index.js"></script>
+</head>
+<body>
+    
+
+    <div id="container">
+        <h2>Sudoku Solver</h2>
+    <table id="Sudoku Board">
+        <colgroup><col><col><col>
+            <colgroup><col><col><col>
+            <colgroup><col><col><col>
+        <tbody>
+        
+        <tr>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tbody>
+        <tr>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tbody>
+        <tr>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        
+        
+    </table>
+    <div>
+        <button id="solve-button">Solve!</button>
+      </div>
+      <div>
+        <button id="clear-button">Clear board</button>
+      </div>
+    </div>
+    <script>
+        // Get all td elements
+        
+        const tableelement=document.getElementById("Sudoku Board");
+        //console.log(tableelement.innerHTML);
+        const tdElements = tableelement.querySelectorAll('td');
+        // Set the contenteditable attribute to true for each td element
+        let actualarray=new Array(9);
+        for(let i=0;i<actualarray.length;i++)
+        {
+            actualarray[i]=new Array(9).fill('.');
+        }
+        function validateInput(element,index) 
+        {
+            const value = element.textContent.trim();
+            if (/^[1-9]$/.test(value)) 
+            {
+                element.textContent = value;
+               // console.log(value,index,index/9,index%9);
+                if(value!== undefined)
+                actualarray[Math.floor(index/9)][index%9]=value.toString();
+            } 
+            else 
+            {
+                element.textContent = ""; // Clear the content if the input is invalid
+                actualarray[Math.floor(index/9)][index%9]=".";
+            }
+        }
+        
+        console.log("Actual Sudoku input is ",actualarray);
+
+        tdElements.forEach((td, index) => 
+        {
+            td.setAttribute('contenteditable', 'true');
+            td.addEventListener('keyup', () => 
+            {
+                validateInput(td,index);
+                console.log("Actual Sudoku input is ",actualarray);
+            });
+        });
+        document.getElementById("solve-button").addEventListener('click',(event)=>
+        {
+            let flag=solveSudoku(actualarray);
+            tdElements.forEach((td,index)=>td.textContent = actualarray[Math.floor(index/9)][index%9])
+            if(flag==false)
+            {
+                window.alert("Invalid Input");
+
+            }
+            console.log(actualarray);
+        }
+        );
+        document.getElementById("clear-button").addEventListener('click',()=>
+        {
+            tdElements.forEach((td,index)=>td.textContent = "");
+            actualarray=actualarray.map((value)=> value.map((val)=>"."));
+            console.log("After clear array now",actualarray);
+        }
+        )
+      </script>
+</body>
+</html>
